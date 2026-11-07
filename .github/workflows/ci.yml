@@ -3,6 +3,7 @@ name: CI
 on:
   push:
   pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -77,6 +78,13 @@ jobs:
 
       - name: Validate Android binary
         run: ./tools/validate-static.sh dist/vendor.oplus.hardware.charger-V11-service
+
+      - name: Upload Android artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: charger-hal-ruby
+          path: dist/
+          if-no-files-found: error
 
       # One release per build, tagged with the short SHA, carrying the three
       # files a ROM integrator needs: the service binary, the init .rc and the
